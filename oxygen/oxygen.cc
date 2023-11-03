@@ -3,18 +3,18 @@
 
 using namespace Project;
 
-fun Oxygen::init() -> void { 
-    uart.setBaudRate(9600);
-    uart.init(); 
-    uart.rxCallbackList.push(etl::bind<&Oxygen::rxCallback>(this));
+fun Oxygen::init() -> void {
+    uart.init({
+        .baudrate=9600,
+        .rxCallback=etl::bind<&Oxygen::rxCallback>(this),
+    });
 #if PROJECT_OXYGEN_IS_USING_NOTIFIER
     notifier.init(); 
 #endif
 }
 
 fun Oxygen::deinit() -> void { 
-    uart.rxCallbackList.pop(etl::bind<&Oxygen::rxCallback>(this));
-    uart.deinit(); 
+    uart.deinit({.rxCallback=etl::bind<&Oxygen::rxCallback>(this)}); 
 #if PROJECT_OXYGEN_IS_USING_NOTIFIER
     notifier.deinit(); 
 #endif
