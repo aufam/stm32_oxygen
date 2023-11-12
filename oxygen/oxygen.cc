@@ -1,23 +1,22 @@
 #include "oxygen/oxygen.h"
 #include "etl/keywords.h"
 
-using namespace Project;
 
 fun Oxygen::init() -> void {
     uart.init({
         .baudrate=9600,
         .rxCallback=etl::bind<&Oxygen::rxCallback>(this),
     });
-#if PROJECT_OXYGEN_IS_USING_NOTIFIER
+    #if PROJECT_OXYGEN_IS_USING_NOTIFIER
     notifier.init(); 
-#endif
+    #endif
 }
 
 fun Oxygen::deinit() -> void { 
     uart.deinit({.rxCallback=etl::bind<&Oxygen::rxCallback>(this)}); 
-#if PROJECT_OXYGEN_IS_USING_NOTIFIER
+    #if PROJECT_OXYGEN_IS_USING_NOTIFIER
     notifier.deinit(); 
-#endif
+    #endif
 }
 
 fun Oxygen::rxCallback(const uint8_t* buf, size_t len) -> void {
@@ -40,7 +39,7 @@ fun Oxygen::rxCallback(const uint8_t* buf, size_t len) -> void {
     values.temperature = etl::safe_div<float>(buf[7] << 8 | buf[8], 10.f);
 
     // notify
-#if PROJECT_OXYGEN_IS_USING_NOTIFIER
+    #if PROJECT_OXYGEN_IS_USING_NOTIFIER
     notifier.setFlags(0b1);
-#endif
+    #endif
 }
