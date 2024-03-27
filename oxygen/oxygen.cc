@@ -40,6 +40,6 @@ fun Oxygen::rxCallback(const uint8_t* buf, size_t len) -> void {
 
     // notify
     #if PROJECT_OXYGEN_IS_USING_NOTIFIER
-    notifier.setFlags(0b1);
+    etl::ignore = notifier.setFlags(0b1);
     #endif
 }
